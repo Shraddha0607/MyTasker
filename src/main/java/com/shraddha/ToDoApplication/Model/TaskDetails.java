@@ -1,6 +1,7 @@
 package com.shraddha.ToDoApplication.Model;
 
-import com.shraddha.ToDoApplication.enums.Category;
+import com.shraddha.ToDoApplication.enums.Priority;
+import com.shraddha.ToDoApplication.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -19,16 +20,21 @@ public class TaskDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    Integer id;
 
     @NotBlank(message = "Name is required")
-    String task ;
+    String taskTitle ;
 
-    @Enumerated(value= EnumType.STRING)
-    Category category;
+    String taskDescription;
+
+    @Enumerated(value= EnumType.ORDINAL)
+    Priority priority;
+
+    @Enumerated(value = EnumType.ORDINAL)
+    Status status = Status.INCOMPLETED;
 
     Date createdAt = new Date();
 
-    Date modifiedAt;
-//    int isActive=0;
+    Date modifiedAt = new Date();
+    int isActive=1;
 }

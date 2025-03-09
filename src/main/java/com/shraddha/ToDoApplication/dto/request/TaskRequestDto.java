@@ -1,6 +1,6 @@
 package com.shraddha.ToDoApplication.dto.request;
 
-import com.shraddha.ToDoApplication.enums.Category;
+import com.shraddha.ToDoApplication.enums.Priority;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TaskRequestDto {
-    String task ;
-    Category category;
+    String taskTitle ;
+    String taskDescription;
+    Priority priority;
 }

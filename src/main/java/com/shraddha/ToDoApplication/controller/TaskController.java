@@ -3,7 +3,10 @@ package com.shraddha.ToDoApplication.controller;
 import com.shraddha.ToDoApplication.ToDoApplication;
 import com.shraddha.ToDoApplication.dto.request.TaskRequestDto;
 import com.shraddha.ToDoApplication.dto.response.TaskResponseDto;
+//import com.shraddha.ToDoApplication.exception.GlobalExceptionHandler;
+import com.shraddha.ToDoApplication.exception.IdNotFoundException;
 import com.shraddha.ToDoApplication.service.TaskService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.Instant;
 
 @RestController
 @RequestMapping("/api/v1/task")
@@ -22,25 +27,71 @@ public class TaskController {
     TaskService taskService;
 
     @PostMapping
-    public ResponseEntity<TaskResponseDto> addTask(@RequestBody TaskRequestDto taskRequestDto){
-        return new ResponseEntity<>(taskService.saveTask(taskRequestDto), HttpStatus.CREATED) ;
+    public ResponseEntity<Object> addTask(@Valid @RequestBody TaskRequestDto taskRequestDto){
+        try {
+            TaskResponseDto taskResponseDto = taskService.saveTask(taskRequestDto);
+            return new ResponseEntity<>(taskResponseDto, HttpStatus.CREATED);
+        } catch (Exception e) {
+            log.error("Error while creating task at {}: {}", Instant.now(), e.getMessage(), e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{id}" )
-    public ResponseEntity<TaskResponseDto> getTask(@PathVariable int id){
-        String http = "get";
-        log.debug("it is info {}", http );
-        return new ResponseEntity<>(taskService.getTask(id), HttpStatus.OK);
+    public ResponseEntity<Object> getTask(@PathVariable int id){
+        try{
+            TaskResponseDto taskResponseDto = taskService.getTask(id);
+            return new ResponseEntity<>(taskResponseDto, HttpStatus.OK);
+        }catch(IdNotFoundException e){
+            log.error("{}", e.getMessage(), e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTask(@PathVariable int id){
-        return new ResponseEntity<>(taskService.deleteTask(id), HttpStatus.OK);
+        try{
+            String response = taskService.deleteTask(id);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch(IdNotFoundException e){
+            log.error("{}", e.getMessage(), e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+//
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateTask(@RequestBody TaskRequestDto taskRequestDto, @PathVariable int id){
+        try{
+            System.out.println("controler hitt");
+            TaskResponseDto taskResponseDto = taskService.updateTask(taskRequestDto, id);
+            return new ResponseEntity<>(taskResponseDto, HttpStatus.OK);
+        }catch(IdNotFoundException e){
+            log.error("{}", e.getMessage(), e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<TaskResponseDto> updateTask(@RequestBody TaskRequestDto taskRequestDto, int id){
-        return new ResponseEntity<>(taskService.updateTask(taskRequestDto, id), HttpStatus.ACCEPTED);
+    @PatchMapping("{id}")
+    public ResponseEntity<Object> markTaskToComplete(@PathVariable int id){
+        try{
+            TaskResponseDto taskResponseDto = taskService.markTaskToComplete(id);
+            return new ResponseEntity<>(taskResponseDto, HttpStatus.OK);
+        }catch(IdNotFoundException e){
+            log.error("{}", e.getMessage(), e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }catch(Exception e){
+            return  new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

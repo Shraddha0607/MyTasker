@@ -1,6 +1,7 @@
 package com.shraddha.ToDoApplication.dto.response;
 
-import com.shraddha.ToDoApplication.enums.Category;
+import com.shraddha.ToDoApplication.enums.Priority;
+import com.shraddha.ToDoApplication.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,6 +11,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class TaskResponseDto {
-    String task ;
-    Category category;
+    String taskTitle ;
+    String taskDescription;
+    Priority priority;
+    Status status;
 }
