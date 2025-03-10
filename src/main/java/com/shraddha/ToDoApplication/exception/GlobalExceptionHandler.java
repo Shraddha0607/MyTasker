@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponseDto> handleGlobalException(Exception ex, WebRequest webRequest){
 
         ExceptionResponseDto exceptionResponseDto = new ExceptionResponseDto(
-                webRequest.getDescription(false),
+                webRequest.getDescription(true),
                 HttpStatus.BAD_REQUEST,
                 ex.getMessage(),
                 LocalDateTime.now()

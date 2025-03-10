@@ -40,8 +40,9 @@ public class TaskController {
     @GetMapping("/{id}" )
     public ResponseEntity<Object> getTask(@PathVariable int id){
         try{
+            System.out.println(("fghj"));
             TaskResponseDto taskResponseDto = taskService.getTask(id);
-            return new ResponseEntity<>(taskResponseDto, HttpStatus.OK);
+            return new ResponseEntity<Object>(taskResponseDto, HttpStatus.OK);
         }catch(IdNotFoundException e){
             log.error("{}", e.getMessage(), e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -49,8 +50,6 @@ public class TaskController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 
 
     @DeleteMapping("/{id}")
@@ -64,9 +63,9 @@ public class TaskController {
         }catch(Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
-//
+
+
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateTask(@RequestBody TaskRequestDto taskRequestDto, @PathVariable int id){
         try{

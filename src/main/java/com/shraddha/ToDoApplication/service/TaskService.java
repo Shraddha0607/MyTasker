@@ -1,6 +1,6 @@
 package com.shraddha.ToDoApplication.service;
 
-import com.shraddha.ToDoApplication.Model.TaskDetails;
+import com.shraddha.ToDoApplication.model.TaskDetails;
 import com.shraddha.ToDoApplication.dto.request.TaskRequestDto;
 import com.shraddha.ToDoApplication.dto.response.TaskResponseDto;
 //import com.shraddha.ToDoApplication.exception.GlobalExceptionHandler;
